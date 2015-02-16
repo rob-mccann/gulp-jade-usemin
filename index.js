@@ -155,17 +155,19 @@ module.exports = function(options) {
         if (section[1] !== 'remove') {
           if (getBlockType(section[5]) === 'js') {
             process(section[4], getFiles(section[5], jsReg), section[1], function(name, file) {
+              var target = options.targetPrefix ? options.targetPrefix + path.basename(file.path) : path.basename(file.path);
               push(file);
               name = options.outputRelativePath ? path.join(options.outputRelativePath, name) : name;
               if (path.extname(file.path) === '.js')
-                jade.push('script(' + renderAttributes(section[5], name.replace(path.basename(name), path.basename(file.path))) + ' )');
+                jade.push('script(' + renderAttributes(section[5], name.replace(path.basename(name), target)) + ' )');
             }.bind(this, section[3]));
           } else {
             process(section[4], getFiles(section[5], cssReg), section[1], function(name, file) {
+              var target = options.targetPrefix ? options.targetPrefix + path.basename(file.path) : path.basename(file.path);
               push(file);
               name = options.outputRelativePath ? path.join(options.outputRelativePath, name) : name;
               if (path.extname(file.path) === '.css')
-                jade.push('link(' + renderAttributes(section[5], name.replace(path.basename(name), path.basename(file.path))) + ' )');
+                jade.push('link(' + renderAttributes(section[5], name.replace(path.basename(name), target)) + ' )');
             }.bind(this, section[3]));
           }
         }
